@@ -1,0 +1,156 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="FitPulseModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Exercises">
+    <Key>
+      <PropertyRef Name="ExerciseId" />
+    </Key>
+    <Property Name="ExerciseId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="MuscleGroup" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Equipment" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="WorkoutSets" Relationship="Self.FK__WorkoutSe__Exerc__5812160E" FromRole="Exercises" ToRole="WorkoutSets" />
+  </EntityType>
+  <EntityType Name="UserMetrics">
+    <Key>
+      <PropertyRef Name="MetricId" />
+    </Key>
+    <Property Name="MetricId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="WeightKg" Type="Decimal" Precision="5" Scale="2" Nullable="false" />
+    <Property Name="DailyCalorieTarget" Type="Int32" Nullable="false" />
+    <Property Name="LoggedAt" Type="DateTime" Precision="7" />
+    <NavigationProperty Name="Users" Relationship="Self.FK__UserMetri__UserI__4E88ABD4" FromRole="UserMetrics" ToRole="Users" />
+  </EntityType>
+  <EntityType Name="Users">
+    <Key>
+      <PropertyRef Name="UserId" />
+    </Key>
+    <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Email" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="PasswordHash" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="FullName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="CreatedAt" Type="DateTime" Precision="7" />
+    <NavigationProperty Name="UserMetrics" Relationship="Self.FK__UserMetri__UserI__4E88ABD4" FromRole="Users" ToRole="UserMetrics" />
+    <NavigationProperty Name="WorkoutLogs" Relationship="Self.FK__WorkoutLo__UserI__5441852A" FromRole="Users" ToRole="WorkoutLogs" />
+    <NavigationProperty Name="MealLogs" Relationship="FitPulseModel.FK__MealLogs__UserId__5FB337D6" FromRole="Users" ToRole="MealLogs" />
+  </EntityType>
+  <EntityType Name="WorkoutLogs">
+    <Key>
+      <PropertyRef Name="WorkoutLogId" />
+    </Key>
+    <Property Name="WorkoutLogId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Title" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="DurationMinutes" Type="Int32" Nullable="false" />
+    <Property Name="LoggedAt" Type="DateTime" Precision="7" />
+    <NavigationProperty Name="Users" Relationship="Self.FK__WorkoutLo__UserI__5441852A" FromRole="WorkoutLogs" ToRole="Users" />
+    <NavigationProperty Name="WorkoutSets" Relationship="Self.FK__WorkoutSe__Worko__571DF1D5" FromRole="WorkoutLogs" ToRole="WorkoutSets" />
+  </EntityType>
+  <EntityType Name="WorkoutSets">
+    <Key>
+      <PropertyRef Name="SetId" />
+    </Key>
+    <Property Name="SetId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="SetNumber" Type="Int32" Nullable="false" />
+    <Property Name="Reps" Type="Int32" Nullable="false" />
+    <Property Name="WeightKg" Type="Decimal" Precision="5" Scale="2" Nullable="false" />
+    <NavigationProperty Name="Exercises" Relationship="Self.FK__WorkoutSe__Exerc__5812160E" FromRole="WorkoutSets" ToRole="Exercises" />
+    <NavigationProperty Name="WorkoutLogs" Relationship="Self.FK__WorkoutSe__Worko__571DF1D5" FromRole="WorkoutSets" ToRole="WorkoutLogs" />
+  </EntityType>
+  <Association Name="FK__WorkoutSe__Exerc__5812160E">
+    <End Role="Exercises" Type="Self.Exercises" Multiplicity="1" />
+    <End Role="WorkoutSets" Type="Self.WorkoutSets" Multiplicity="*" />
+  </Association>
+  <Association Name="FK__UserMetri__UserI__4E88ABD4">
+    <End Role="Users" Type="Self.Users" Multiplicity="1" />
+    <End Role="UserMetrics" Type="Self.UserMetrics" Multiplicity="*" />
+  </Association>
+  <Association Name="FK__WorkoutLo__UserI__5441852A">
+    <End Role="Users" Type="Self.Users" Multiplicity="1" />
+    <End Role="WorkoutLogs" Type="Self.WorkoutLogs" Multiplicity="*" />
+  </Association>
+  <Association Name="FK__WorkoutSe__Worko__571DF1D5">
+    <End Role="WorkoutLogs" Type="Self.WorkoutLogs" Multiplicity="1" />
+    <End Role="WorkoutSets" Type="Self.WorkoutSets" Multiplicity="*" />
+  </Association>
+  <EntityContainer Name="FitPulseEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Exercises" EntityType="Self.Exercises" />
+    <EntitySet Name="UserMetrics" EntityType="Self.UserMetrics" />
+    <EntitySet Name="Users" EntityType="Self.Users" />
+    <EntitySet Name="WorkoutLogs" EntityType="Self.WorkoutLogs" />
+    <EntitySet Name="WorkoutSets" EntityType="Self.WorkoutSets" />
+    <AssociationSet Name="FK__WorkoutSe__Exerc__5812160E" Association="Self.FK__WorkoutSe__Exerc__5812160E">
+      <End Role="Exercises" EntitySet="Exercises" />
+      <End Role="WorkoutSets" EntitySet="WorkoutSets" />
+    </AssociationSet>
+    <AssociationSet Name="FK__UserMetri__UserI__4E88ABD4" Association="Self.FK__UserMetri__UserI__4E88ABD4">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="UserMetrics" EntitySet="UserMetrics" />
+    </AssociationSet>
+    <AssociationSet Name="FK__WorkoutLo__UserI__5441852A" Association="Self.FK__WorkoutLo__UserI__5441852A">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="WorkoutLogs" EntitySet="WorkoutLogs" />
+    </AssociationSet>
+    <AssociationSet Name="FK__WorkoutSe__Worko__571DF1D5" Association="Self.FK__WorkoutSe__Worko__571DF1D5">
+      <End Role="WorkoutLogs" EntitySet="WorkoutLogs" />
+      <End Role="WorkoutSets" EntitySet="WorkoutSets" />
+    </AssociationSet>
+    <EntitySet Name="FoodItems" EntityType="FitPulseModel.FoodItems" />
+    <EntitySet Name="MealItems" EntityType="FitPulseModel.MealItems" />
+    <EntitySet Name="MealLogs" EntityType="FitPulseModel.MealLogs" />
+    <AssociationSet Name="FK__MealItems__FoodI__6383C8BA" Association="FitPulseModel.FK__MealItems__FoodI__6383C8BA">
+      <End Role="FoodItems" EntitySet="FoodItems" />
+      <End Role="MealItems" EntitySet="MealItems" />
+    </AssociationSet>
+    <AssociationSet Name="FK__MealItems__MealL__628FA481" Association="FitPulseModel.FK__MealItems__MealL__628FA481">
+      <End Role="MealLogs" EntitySet="MealLogs" />
+      <End Role="MealItems" EntitySet="MealItems" />
+    </AssociationSet>
+    <AssociationSet Name="FK__MealLogs__UserId__5FB337D6" Association="FitPulseModel.FK__MealLogs__UserId__5FB337D6">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="MealLogs" EntitySet="MealLogs" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="FoodItems">
+    <Key>
+      <PropertyRef Name="FoodItemId" />
+    </Key>
+    <Property Name="FoodItemId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="ServingSizeUnit" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Calories" Type="Decimal" Nullable="false" Precision="6" Scale="2" />
+    <Property Name="ProteinGrams" Type="Decimal" Nullable="false" Precision="5" Scale="2" />
+    <Property Name="CarbsGrams" Type="Decimal" Nullable="false" Precision="5" Scale="2" />
+    <Property Name="FatGrams" Type="Decimal" Nullable="false" Precision="5" Scale="2" />
+    <NavigationProperty Name="MealItems" Relationship="FitPulseModel.FK__MealItems__FoodI__6383C8BA" FromRole="FoodItems" ToRole="MealItems" />
+  </EntityType>
+  <EntityType Name="MealItems">
+    <Key>
+      <PropertyRef Name="MealItemId" />
+    </Key>
+    <Property Name="MealItemId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Servings" Type="Decimal" Nullable="false" Precision="4" Scale="2" />
+    <NavigationProperty Name="FoodItems" Relationship="FitPulseModel.FK__MealItems__FoodI__6383C8BA" FromRole="MealItems" ToRole="FoodItems" />
+    <NavigationProperty Name="MealLogs" Relationship="FitPulseModel.FK__MealItems__MealL__628FA481" FromRole="MealItems" ToRole="MealLogs" />
+  </EntityType>
+  <EntityType Name="MealLogs">
+    <Key>
+      <PropertyRef Name="MealLogId" />
+    </Key>
+    <Property Name="MealLogId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MealType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="LoggedAt" Type="DateTime" Precision="7" />
+    <NavigationProperty Name="MealItems" Relationship="FitPulseModel.FK__MealItems__MealL__628FA481" FromRole="MealLogs" ToRole="MealItems" />
+    <NavigationProperty Name="Users" Relationship="FitPulseModel.FK__MealLogs__UserId__5FB337D6" FromRole="MealLogs" ToRole="Users" />
+  </EntityType>
+  <Association Name="FK__MealItems__FoodI__6383C8BA">
+    <End Type="FitPulseModel.FoodItems" Role="FoodItems" Multiplicity="1" />
+    <End Type="FitPulseModel.MealItems" Role="MealItems" Multiplicity="*" />
+  </Association>
+  <Association Name="FK__MealItems__MealL__628FA481">
+    <End Type="FitPulseModel.MealLogs" Role="MealLogs" Multiplicity="1" />
+    <End Type="FitPulseModel.MealItems" Role="MealItems" Multiplicity="*" />
+  </Association>
+  <Association Name="FK__MealLogs__UserId__5FB337D6">
+    <End Type="FitPulseModel.Users" Role="Users" Multiplicity="1" />
+    <End Type="FitPulseModel.MealLogs" Role="MealLogs" Multiplicity="*" />
+  </Association>
+</Schema>

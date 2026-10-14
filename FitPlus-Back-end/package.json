@@ -1,0 +1,10 @@
+{
+  "name": "fitpulse-backend-proxy",
+  "version": "1.0.0",
+  "description": "Dev reverse proxy for FitPulse IIS Express backend",
+  "main": "proxy.js",
+  "scripts": {
+    "proxy": "node proxy.js",
+    "start": "node proxy.js"
+  }
+}
